@@ -1,53 +1,33 @@
-// App.jsx
-import { useEffect } from 'react';
-import './App.css'; // Estilos, se quiser
+import React from 'react';
+import DigitRecognizer from './components/DigitRecognizer';
+import Img123 from './assets/123.jpg';
 
-function App() {
-  function resetGame() {
-    // Implemente ou copie da sua lógica do script.js
-    console.log("Resetando jogo...");
-  }
-
-  useEffect(() => {
-    // Aqui você pode importar lógicas JS (ex: gerar número aleatório)
-    // ou interações que estavam no script.js
-  }, []);
-
+const App: React.FC = () => {
   return (
-    <>
-      <div id="div-header">
-        <img src="assets/123.jpg" alt="123_Image" width="256px" />
-        <h1>
+    <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-[#0b1437] text-white p-0">
+      {/* Header */}
+      <header className="flex items-center justify-center gap-5 mb-10">
+        <img src={Img123} alt="123_Image" className="w-64" />
+        <h1 className="text-[48px] text-pink-400 m-0 leading-tight">
           Caligrafia Divertida: <br />
           Escreva e Descubra!
         </h1>
-      </div>
+      </header>
 
-      <section className="conteudo-branco">
-        <h2>Teste sua caligrafia</h2>
-        <p className="description">
+      {/* Conteúdo principal */}
+      <section className="bg-white text-[#333] p-8 rounded-xl shadow-lg max-w-lg w-[90%] text-center">
+        <h2 className="text-2xl font-semibold mb-2 text-black">
+          Teste sua caligrafia
+        </h2>
+        <p className="mb-6 text-black">
           Pegue papel e lápis, desenhe o número que pedirmos e envie uma foto. Vamos avaliar sua
           caligrafia e dizer se está ótima, regular ou precisa melhorar!
         </p>
 
-        <div className="numbers">
-          <p id="numberRandom">5</p> {/* Isso pode virar um estado depois */}
-        </div>
-
-        <form id="uploadForm">
-          <input type="file" id="imageUpload" accept="image/*" capture="camera" required />
-          <br />
-          <button type="submit">Enviar</button>
-        </form>
-
-        <div className="result" id="resultado"></div>
-
-        <button id="resetButton" style={{ display: 'none' }} onClick={resetGame}>
-          Tentar Novamente
-        </button>
+        <DigitRecognizer />
       </section>
-    </>
+    </div>
   );
-}
+};
 
 export default App;
