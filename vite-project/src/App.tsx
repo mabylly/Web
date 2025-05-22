@@ -1,31 +1,29 @@
+// src/App.tsx
 import React from 'react';
-import DigitRecognizer from './components/DigitRecognizer';
-import Img123 from './assets/123.jpg';
+import { FaPencilAlt } from 'react-icons/fa';
+import Whiteboard from './components/whiteboard';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-[#0b1437] text-white p-0">
-      {/* Header */}
-      <header className="flex items-center justify-center gap-5 mb-10">
-        <img src={Img123} alt="123_Image" className="w-64" />
-        <h1 className="text-[48px] text-pink-400 m-0 leading-tight">
-          Caligrafia Divertida: <br />
-          Escreva e Descubra!
-        </h1>
-      </header>
+    <div className="min-h-screen w-screen bg-gradient-to-br from-blue-200 to-blue-500 flex justify-center items-center p-4">
+      <div className="bg-white w-full max-w-4xl rounded-3xl shadow-xl p-6 relative">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-2 text-blue-800 font-semibold text-xl">
+            <FaPencilAlt className="text-yellow-500" />
+            HandLetter
+          </div>
 
-      {/* Conteúdo principal */}
-      <section className="bg-white text-[#333] p-8 rounded-xl shadow-lg max-w-lg w-[90%] text-center">
-        <h2 className="text-2xl font-semibold mb-2 text-black">
-          Teste sua caligrafia
-        </h2>
-        <p className="mb-6 text-black">
-          Pegue papel e lápis, desenhe o número que pedirmos e envie uma foto. Vamos avaliar sua
-          caligrafia e dizer se está ótima, regular ou precisa melhorar!
-        </p>
-
-        <DigitRecognizer />
-      </section>
+        </div>
+        <div className="text-center text-gray-600 mt-10">
+          <h1 className="text-3xl font-bold mb-2">Random Word</h1>
+          <div className="flex justify-center mt-4">
+            <div className="px-4 py-2 bg-blue-100 rounded-full border border-blue-300">
+              <p className="text-xl text-blue-800 font-medium">Handwriting Practice</p>
+            </div>
+          </div>
+        </div>
+        <Whiteboard />
+      </div>
     </div>
   );
 };
