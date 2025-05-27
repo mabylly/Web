@@ -82,21 +82,21 @@ const Whiteboard = forwardRef<WhiteboardHandle>((_, ref) => {
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-white px-4 py-2 rounded-full shadow-lg z-10">
           <button
             onClick={() => setTool('pencil')}
-            className={`p-3 rounded-xl ${tool === 'pencil' ? 'bg-blue-600 text-white' : 'bg-yellow-400 text-white'}`}
+            className={`p-3 rounded-xl ${tool === 'pencil' ? 'bg-blue-600 text-white' : 'bg-blue-400 text-white'}`}
             title="Lápis"
           >
             <FiEdit3 size={20} />
           </button>
           <button
             onClick={() => setTool('eraser')}
-            className={`p-3 rounded-xl ${tool === 'eraser' ? 'bg-blue-600 text-white' : 'bg-black text-white'}`}
+            className={`p-3 rounded-xl ${tool === 'eraser' ? 'bg-blue-600 text-white' : 'bg-blue-400 text-white'}`}
             title="Borracha"
           >
             <FiSquare size={20} />
           </button>
           <button
             onClick={handleClear}
-            className="p-3 bg-black text-white rounded-xl"
+            className="p-3 bg-blue-400 text-white rounded-xl"
             title="Limpar"
           >
             <FiTrash2 size={20} />

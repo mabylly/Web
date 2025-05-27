@@ -9,22 +9,27 @@ const App: React.FC = () => {
   const [imagemSalva, setImagemSalva] = useState<string | null>(null);
   const whiteboardRef = useRef<WhiteboardHandle>(null);
 
-  useEffect(() => {
-    const getRandomWord = () => {
-      const words = palavra.palavras;
-      const index = Math.floor(Math.random() * words.length);
-      const word = words[index];
-      setRandomWord(word);
-      localStorage.setItem('palavraAleatoria', word);
-    };
-    getRandomWord();
+useEffect(() => {
+  const getRandomWord = () => {
+    const words = palavra.palavras;
+    const index = Math.floor(Math.random() * words.length);
+    const word = words[index];
+    setRandomWord(word);
+    console.log("index:" + index);
+    console.log("Word:" + word);
+    localStorage.setItem('palavraAleatoria', word);
+  };
 
-    // Se já existir uma imagem salva, carrega ela
-    const imgSalva = localStorage.getItem('escritaSalva');
-    if (imgSalva) {
-      setImagemSalva(imgSalva);
-    }
-  }, []);
+  getRandomWord();
+
+  const imgSalva = localStorage.getItem('escritaSalva');
+  if (imgSalva) {
+    setImagemSalva(imgSalva); // Certifique-se de que setImagemSalva está no array de dependências se você o adicionar
+  }
+}, []); // Array vazio para executar apenas na montagem
+
+    
+
 
   const salvarEscrita = () => {
     const imageDataUrl = whiteboardRef.current?.exportAsImage();
@@ -66,9 +71,9 @@ const App: React.FC = () => {
         <div className="flex justify-center mt-6">
           <button
             onClick={salvarEscrita}
-            className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+            className="px-4 py-2 bg-blue-400 text-white rounded-xl hover:bg-blue-700"
           >
-            Salvar Escrita
+            Enviar Escrita
           </button>
         </div>
 
