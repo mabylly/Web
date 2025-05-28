@@ -11,6 +11,7 @@ import { FiEdit3, FiSquare, FiTrash2 } from 'react-icons/fi';
 // Tipagem para permitir o uso do ref no componente
 export type WhiteboardHandle = {
   exportAsImage: () => string | null;
+  clear: () => void;
 };
 
 const Whiteboard = forwardRef<WhiteboardHandle>((_, ref) => {
@@ -58,7 +59,12 @@ const Whiteboard = forwardRef<WhiteboardHandle>((_, ref) => {
 
   const handleClear = () => {
     if (fabricCanvas.current) {
-      fabricCanvas.current.clear();
+      const canvas = fabricCanvas.current;
+      canvas.clear();
+
+      // Restaurar o fundo branco
+      canvas.backgroundColor = 'white';
+      canvas.renderAll();
     }
   };
 
@@ -74,6 +80,7 @@ const Whiteboard = forwardRef<WhiteboardHandle>((_, ref) => {
 
   useImperativeHandle(ref, () => ({
     exportAsImage,
+    clear: handleClear,
   }));
 
   return (

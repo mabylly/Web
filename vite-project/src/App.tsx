@@ -1,44 +1,71 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
 import type { WhiteboardHandle } from './components/whiteboard';
 import Whiteboard from './components/whiteboard';
-import palavra from './data/palavras.json';
+import listaDePalavras from './data/palavras.json';
+import { analyzeImageWithVision } from './services/visionService';
 
-const App: React.FC = () => {
+
+export default function App() {
   const [randomWord, setRandomWord] = useState('');
   const [imagemSalva, setImagemSalva] = useState<string | null>(null);
+  const [textoDetectado, setTextoDetectado] = useState<string | null>(null); // Novo estado para o texto da API
+  const [isLoadingAPI, setIsLoadingAPI] = useState(false); // Novo estado para feedback de carregamento
+  const [apiError, setApiError] = useState<string | null>(null); // Novo estado para erros da API
+
   const whiteboardRef = useRef<WhiteboardHandle>(null);
 
-useEffect(() => {
+  // Função para obter uma palavra aleatória da lista
   const getRandomWord = () => {
-    const words = palavra.palavras;
-    const index = Math.floor(Math.random() * words.length);
-    const word = words[index];
-    setRandomWord(word);
-    console.log("index:" + index);
-    console.log("Word:" + word);
-    localStorage.setItem('palavraAleatoria', word);
+    const words = listaDePalavras;
+    let newWord = randomWord;
+    while (newWord === randomWord) {
+      const index = Math.floor(Math.random() * words.length);
+      newWord = words[index];
+    }
+    setRandomWord(newWord);
   };
 
-  getRandomWord();
+  useEffect(() => {    
+    getRandomWord();
+  }, []);
 
-  const imgSalva = localStorage.getItem('escritaSalva');
-  if (imgSalva) {
-    setImagemSalva(imgSalva); // Certifique-se de que setImagemSalva está no array de dependências se você o adicionar
-  }
-}, []); // Array vazio para executar apenas na montagem
+  const handleProximaPalavra = () => {
+    getRandomWord();
+    setImagemSalva(null);
+    setTextoDetectado(null);
+    setApiError(null);
+    setIsLoadingAPI(false);
+    whiteboardRef.current?.clear();
+};
 
-    
-
-
-  const salvarEscrita = () => {
+  const salvarEscrita = async () => {
     const imageDataUrl = whiteboardRef.current?.exportAsImage();
-    if (imageDataUrl) {
-      localStorage.setItem('escritaSalva', imageDataUrl);
-      setImagemSalva(imageDataUrl); // Atualiza estado para mostrar no app
-      console.log('Imagem salva no localStorage');
-    } else {
-      console.error('Erro ao exportar canvas');
+    console.log("Dados da imagem exportada:", imageDataUrl); //teste
+    if (!imageDataUrl) {
+      setApiError('Não foi possível capturar a imagem do quadro.');
+      return;
+    }
+
+    setImagemSalva(imageDataUrl);
+    setIsLoadingAPI(true);
+    setApiError(null);
+    setTextoDetectado(null);
+
+    try {
+      // Chama a função do nosso serviço
+      const detectedText = await analyzeImageWithVision(imageDataUrl);
+      setTextoDetectado(detectedText);
+    } catch (error) {
+      // O catch vai pegar qualquer erro lançado pela nossa função de serviço
+      if (error instanceof Error) {
+        setApiError(error.message);
+      } else {
+        setApiError('Ocorreu um erro desconhecido.');
+      }
+    } finally {
+      // Garante que o loading seja desativado no final
+      setIsLoadingAPI(false);
     }
   };
 
@@ -68,29 +95,53 @@ useEffect(() => {
           <Whiteboard ref={whiteboardRef} />
         </div>
 
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-6 gap-4">
           <button
             onClick={salvarEscrita}
-            className="px-4 py-2 bg-blue-400 text-white rounded-xl hover:bg-blue-700"
+            disabled={isLoadingAPI} // Desabilita o botão durante o carregamento
+            className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-700 disabled:bg-gray-400"
           >
-            Enviar Escrita
+            {isLoadingAPI ? 'Enviando...' : 'Enviar Escrita'}
           </button>
+            <button
+              onClick={handleProximaPalavra}
+              className="px-4 py-2 bg-yellow-400 text-white rounded-xl hover:bg-yellow-600"
+            >
+              Próxima Palavra
+            </button>
         </div>
 
-        {/* MOSTRA A IMAGEM SALVA 
-        {imagemSalva && (
+        {/* MOSTRA A IMAGEM SALVA */}
+        {imagemSalva && !isLoadingAPI && !apiError && ( // Só mostra se não estiver carregando e não houver erro na API
           <div className="mt-8 text-center">
-            <h2 className="text-lg font-semibold text-gray-700 mb-2">Escrita Salva:</h2>
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">Sua Escrita:</h2>
             <img
               src={imagemSalva}
               alt="Escrita salva"
-              className="mx-auto max-w-full border rounded-xl shadow"
+              className="mx-auto max-w-xs md:max-w-sm border rounded-xl shadow" // Ajustei o tamanho máximo
             />
           </div>
-        )}*/}
+        )}
+
+        {/* MOSTRA O RESULTADO DA API */}
+        {isLoadingAPI && (
+          <div className="mt-4 text-center text-blue-700">
+            <p>Analisando sua escrita...</p>
+          </div>
+        )}
+
+        {apiError && (
+          <div className="mt-4 text-center text-red-600 bg-red-100 p-3 rounded-lg">
+            <p><strong>Erro na Análise:</strong> {apiError}</p>
+          </div>
+        )}
+
+        {textoDetectado && !isLoadingAPI && (
+          <div className="mt-4 text-center text-green-700 bg-green-100 p-3 rounded-lg">
+            <p><strong>Texto Detectado pela API:</strong> {textoDetectado}</p>
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default App;
+}
