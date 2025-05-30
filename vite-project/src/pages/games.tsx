@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
-import type { WhiteboardHandle } from './components/whiteboard'; // Certifique-se que o caminho está correto
-import Whiteboard from './components/whiteboard'; // Certifique-se que o caminho está correto
-import listaDePalavras from './data/palavras.json';
-import { analyzeImageWithVision } from './services/visionService';
-import type { VisionCharacter, VisionAnalysisResult } from './services/visionService';
+import type { WhiteboardHandle } from '../components/whiteboard'; // Certifique-se que o caminho está correto
+import Whiteboard from '../components/whiteboard'; // Certifique-se que o caminho está correto
+import listaDePalavras from '../data/palavras.json';
+import { analyzeImageWithVision } from '../services/visionService';
+import type { VisionCharacter, VisionAnalysisResult } from '../services/visionService';
 
 interface DiffCharacter {
   targetChar: string | null;
@@ -15,7 +15,7 @@ interface DiffCharacter {
   confidence?: number;
 }
 
-export default function App() {
+export default function Games() {
   const [randomWord, setRandomWord] = useState('');
   const [imagemSalva, setImagemSalva] = useState<string | null>(null);
   const [isLoadingAPI, setIsLoadingAPI] = useState(false);
