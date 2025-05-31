@@ -30,13 +30,13 @@ Siga estes passos simples para colocar seu projeto em execução.
 1.  Abra um **novo Prompt de Comando** ou **PowerShell**.
 2.  Navegue até a pasta do seu frontend:
     ```bash
-    cd frontend
+    cd frontend    
     ```
 3.  Inicie o aplicativo React:
     ```bash
+    npm install
     npm run dev
-    # ou se usar yarn:
-    # yarn dev
+
     ```
     O aplicativo React abrirá no seu navegador, geralmente em `http://localhost:5173`. Se não abrir automaticamente, copie e cole essa URL no seu navegador.
 
