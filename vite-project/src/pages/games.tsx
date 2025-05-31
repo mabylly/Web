@@ -176,6 +176,7 @@ export default function Games({ difficulty, onGoHome }: GamesProps) {
   };
 
   const salvarEscrita = async () => {
+    
     const imageDataUrl = whiteboardRef.current?.exportAsImage();
     if (!imageDataUrl) {
       setApiError('Não foi possível capturar a imagem do quadro.');
