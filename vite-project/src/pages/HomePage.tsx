@@ -1,70 +1,77 @@
-// src/pages/GamePage.tsx
+import { useState } from 'react';
+import { ButtonDifficulty } from '../components/ButtonDifficulty';
 
-import { useState } from 'react'
 
-export let selectedDifficulty: number = 0
+// Definindo o tipo das props que HomePage receberá
+interface HomePageProps {
+  onStartGame: (difficulty: number) => void;
+}
 
-export default function HomePage() {
-  const [difficulty, setDifficulty] = useState<number>(0)
+export default function HomePage({ onStartGame }: HomePageProps) { // Adiciona a prop
+  const [difficulty, setDifficulty] = useState<number | null>(null);
+
+  const DIFICULDADE_FACIL = 0.4;
+  const DIFICULDADE_MEDIO = 0.6;
+  const DIFICULDADE_DIFICIL = 0.8;
 
   const handleSetDifficulty = (level: number) => {
-    setDifficulty(level)
-    selectedDifficulty = level
-  }
+    setDifficulty(level);
 
+  };
+
+  const handleIniciarJogoClick = () => {
+
+
+    if (difficulty === null) {
+      alert('Por favor, selecione uma dificuldade primeiro!');
+      return;
+    }
+
+    onStartGame(difficulty); // Esta é a chamada para a função em App.tsx
+    };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      {/* Título do jogo */}
-      <h1 className="text-5xl font-extrabold mb-4 text-center text-indigo-700 drop-shadow">
-        Teste sua escrita
-      </h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-blue-500 p-6">
+      <div className="bg-white shadow-2xl rounded-3xl p-8 md:p-12 w-full max-w-2xl text-center">
+        <h1 className="text-6xl md:text-7xl font-bold mb-8 text-indigo-700 drop-shadow-lg font-pacifico">
+          Teste sua escrita
+        </h1>
+        <h2 className="text-3xl font-semibold mb-10 text-gray-700">
+          Selecione a Dificuldade
+        </h2>
 
-      {/* Subtítulo de dificuldade */}
-      <h2 className="text-2xl font-semibold mb-8 text-gray-800 text-center">
-        Selecione a Dificuldade
-      </h2>
+        <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-12">
+          <ButtonDifficulty
+            title="Fácil"
+            difficulty={difficulty}
+            value={DIFICULDADE_FACIL}
+            color="blue"
+            onClick={() => handleSetDifficulty(DIFICULDADE_FACIL)}
+          />
+          <ButtonDifficulty
+            title="Médio"
+            difficulty={difficulty}
+            value={DIFICULDADE_MEDIO}
+            color="yellow"
+            onClick={() => handleSetDifficulty(DIFICULDADE_MEDIO)}
+          />
+          <ButtonDifficulty
+            title="Difícil"
+            difficulty={difficulty}
+            value={DIFICULDADE_DIFICIL}
+            color="red"
+            onClick={() => handleSetDifficulty(DIFICULDADE_DIFICIL)}
+          />
+        </div>
 
-      <div className="flex gap-4 mb-6">
+
         <button
-          onClick={() => handleSetDifficulty(0.4)}
-          className={`px-6 py-3 rounded-2xl font-medium shadow transition duration-300 ${
-            difficulty === 1
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-blue-600 border border-blue-600 hover:bg-blue-100'
-          }`}
+          onClick={handleIniciarJogoClick} // Alterado para chamar a nova função
+          disabled={difficulty === null}
+          className="mt-8 bg-green-600 hover:bg-green-700 text-white px-12 py-4 text-xl rounded-2xl font-bold shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed"
         >
-          Fácil
-        </button>
-
-        <button
-          onClick={() => handleSetDifficulty(0.6)}
-          className={`px-6 py-3 rounded-2xl font-medium shadow transition duration-300 ${
-            difficulty === 2
-              ? 'bg-yellow-500 text-white'
-              : 'bg-white text-yellow-500 border border-yellow-500 hover:bg-yellow-100'
-          }`}
-        >
-          Médio
-        </button>
-
-        <button
-          onClick={() => handleSetDifficulty(0.8)}
-          className={`px-6 py-3 rounded-2xl font-medium shadow transition duration-300 ${
-            difficulty === 3
-              ? 'bg-red-600 text-white'
-              : 'bg-white text-red-600 border border-red-600 hover:bg-red-100'
-          }`}
-        >
-          Difícil
+          Iniciar Jogo
         </button>
       </div>
-
-      <button
-        onClick={() => alert(`Iniciando jogo na dificuldade ${difficulty}`)}
-        className="mt-4 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-2xl font-semibold shadow transition duration-300"
-      >
-        Iniciar Jogo
-      </button>
     </div>
-  )
+  );
 }
