@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import HomePage from './pages/HomePage'; // Ajuste o caminho se necessário
-import Games from './pages/Games';     // Ajuste o caminho se necessário
+import Games from './pages/games';     // Ajuste o caminho se necessário
 
 export default function App() {
   // Estado para controlar qual página está ativa: 'home' ou 'games'

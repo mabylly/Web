@@ -77,3 +77,30 @@ async def analyze_image(request: ImageAnalysisRequest):
             # Captura outros erros inesperados
             print(f"Erro inesperado: {e}")
             raise HTTPException(status_code=500, detail="Erro interno ao processar a imagem.")
+
+# ---  Endpoint com doc help do endpoints  ---
+@app.get("/api/help")
+async def help_endpoint():
+    try:
+        return {
+            "endpoints": [
+                {
+                    "method": "GET",
+                    "path": "/",
+                    "description": "Teste básico para verificar se o backend está funcionando.",
+                },
+                {
+                    "method": "POST",
+                    "path": "/api/analyze-image",
+                    "description": "Recebe uma imagem em base64 e retorna o texto detectado via Google Vision API.",
+                },
+                {
+                    "method": "GET",
+                    "path": "/api/help",
+                    "description": "Retorna a descrição de todos os endpoints disponíveis na API.",
+                }
+            ]
+        }
+    except Exception as e:
+        print(f"Erro inesperado no endpoint /api/help: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao gerar documentação dos endpoints.")
