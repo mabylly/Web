@@ -9,7 +9,6 @@ export default function App() {
   const [gameDifficulty, setGameDifficulty] = useState<number | null>(null);
 
 
-  console.log("App.tsx: Estado atual de currentPage:", currentPage);
   // Função para iniciar o jogo e passar a dificuldade
   const handleStartGame = (difficulty: number) => {
     setGameDifficulty(difficulty);

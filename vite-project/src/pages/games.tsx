@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FaPencilAlt } from 'react-icons/fa';
-import type { WhiteboardHandle } from '../components/whiteboard'; // Certifique-se que o caminho está correto
-import Whiteboard from '../components/whiteboard'; // Certifique-se que o caminho está correto
+import type { WhiteboardHandle } from '../components/whiteboard'; 
+import Whiteboard from '../components/whiteboard'; 
 import listaDePalavras from '../data/palavras.json';
 import { analyzeImageWithVision } from '../services/visionService';
 import type { VisionCharacter, VisionAnalysisResult } from '../services/visionService';
